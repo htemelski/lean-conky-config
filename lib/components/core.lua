@@ -150,13 +150,34 @@ local function get_top_entries(max, dev, types, padded_len, align)
 end
 
 lcc.tpl.cpu = [[
-${font}${execi 3600 grep model /proc/cpuinfo | cut -d : -f2 | tail -1 | sed 's/\s//'} ${alignr} ${cpu cpu0}%
-${color3}${cpugraph cpu0}${color}
+${font}${execi 3600 grep model /proc/cpuinfo | cut -d : -f2 | tail -1 | sed 's/\s//'}
+
+${color2}${voffset 5}Core frequency${color1}${alignr}${color2}${freq} MHz
+${font}${color}Package temperature ${alignr}${exec sensors | grep '^CPU:.*°C' | sed -E 's/.*\+([0-9]+\.[0-9]+)°C.*/\1/'
+}   C
+
+CPU Load  ${alignr} ${cpu cpu0}%
+${cpubar cpu1}
+${cpubar cpu2}
+${cpubar cpu3}
+${cpubar cpu4}
+${cpubar cpu5}
+${cpubar cpu6}
+${cpubar cpu7}
+${cpubar cpu8}
+${cpubar cpu9}
+${cpubar cpu10}
+${cpubar cpu11}
+${cpubar cpu12}
+${cpubar cpu13}
+${cpubar cpu14}
+${cpubar cpu15}
+${cpubar cpu16}
 {% if top_cpu_entries then %}
-${color2}${lua font h2 {PROCESS ${goto $sr{156}}PID ${goto $sr{194}}MEM% ${alignr}CPU%}}${font}${color}#
+${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${goto $sr{280}}MEM% ${alignr}CPU%}}${font}${color}#
 {% for _, v in ipairs(top_cpu_entries) do +%}
-{%= v.name %} ${goto $sr{156}}{%= v.pid %}${alignr}${offset $sr{-44}}{%= v.mem %}
-${voffset $sr{-13}}${alignr}{%= v.cpu %}{% end %}{% end %}]]
+{%= v.name %} ${goto $sr{156}}{%= v.pid %}${alignr}${offset $sr{-96}}{%= v.mem %}
+${voffset $sr{-16}}${alignr}{%= v.cpu %}{% end %}{% end %}]]
 function core.cpu(args)
     local top_n = utils.table.get(args, 'top_n', 5)
     return core.section("CPU", "") .. "\n" .. lcc.tpl.cpu {
@@ -170,10 +191,10 @@ ${color3}${membar}${color}
 ${color2}${lua font h2 SWAP}${font}${color} ${alignc $sr{-16}}${swap} / ${swapmax} ${alignr}${swapperc}%
 ${color3}${swapbar}${color}
 {% if top_mem_entries then %}
-${color2}${lua font h2 {PROCESS ${goto $sr{156}}PID ${goto $sr{198}}CPU%${alignr}MEM%}}${font}${color}#
+${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${goto $sr{280}}CPU%${alignr}MEM%}}${font}${color}#
 {% for _, v in ipairs(top_mem_entries) do +%}
-{%= v.name %} ${goto $sr{156}}{%= v.pid %}${alignr}${offset $sr{-44}}{%= v.cpu %}
-${voffset $sr{-13}}${alignr}{%= v.mem %}{% end %}{% end %}]]
+{%= v.name %} ${goto $sr{156}}{%= v.pid %}${alignr}${offset $sr{-96}}{%= v.cpu %}
+${voffset $sr{-16}}${alignr}{%= v.mem %}{% end %}{% end %}]]
 function core.memory(args)
     local top_n = utils.table.get(args, 'top_n', 5)
     return core.section("MEMORY", "") .. "\n" .. lcc.tpl.memory {
@@ -186,7 +207,7 @@ ${lua disks 5}
 ${voffset $sr{4}}${lua font icon_s {} {Read:}} ${font}${diskio_read} ${alignr}${lua font icon_s {} {Write: }}${font}${diskio_write}${lua font icon_s { } {}}
 ${color3}${diskiograph_read {%= lcc.half_graph_size %}} ${alignr}${diskiograph_write {%= lcc.half_graph_size %}}${color}
 {% if top_io_entries then %}
-${color2}${lua font h2 {PROCESS ${goto $sr{156}}PID ${alignr}READ/WRITE}}${font}${color}#
+${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${alignr}READ/WRITE}}${font}${color}#
 {% for _, v in ipairs(top_io_entries) do +%}
 {%= v.name %} ${goto $sr{156}}{%= v.pid %} ${alignr}{%= v.io_read %} / {%= v.io_write %}{% end %}{% end %}]]
 function core.storage(args)
@@ -241,7 +262,7 @@ lcc.tpl.network = [[
 ${color2}${lua font icon_s { } {}}${lua font h2 {Local IPs}}${alignr}${lua font h2 {External IP}}${lua font icon_s { } {}}${font}${color}
 ${execi 60 ip a | grep inet | grep -vw lo | grep -v inet6 | cut -d \/ -f1 | sed 's/[^0-9\.]*//g'}#
 ${alignr}${texeci 3600  wget -q -O- https://ipecho.net/plain; echo}
-${voffset $sr{5}}${lua ifaces 10}]]
+${voffset $sr{5}}${lua ifaces 10}]] 
 function core.network()
     return core.section("NETWORK", "") .. "\n" .. lcc.tpl.network()
 end
@@ -251,7 +272,7 @@ end
 lcc.tpl.ifaces = [[
 {% if ifaces then %}{% for _, iface in ipairs(ifaces) do %}
 ${if_existing /sys/class/net/{%= iface %}/operstate up}#
-${lua font icon_s  ${voffset $sr{-1}}${font :size=$sc{7}}▼}${font}  ${downspeed {%= iface %}} ${alignc $sr{-22}}${lua font h2 {{%= iface %}}}${font}#
+${lua font icon_s  ${voffset $sr{-1}}${font :size=$sc{7}}▼}${font}  ${downspeed {%= iface %}} ${alignc $sr{-22}}${font}#
 ${alignr}${upspeed {%= iface %}} ${lua font icon_s  ${voffset $sr{-2}}${font :size=$sc{7}}▲}${font}
 ${color3}${downspeedgraph {%= iface %} {%= lcc.half_graph_size %}} ${alignr}${upspeedgraph {%= iface %} {%= lcc.half_graph_size %} }${color}#
 ${endif}

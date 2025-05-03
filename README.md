@@ -1,3 +1,6 @@
+# Note 
+Personalized lean conky config used on a 1920x1200 screen in portrait mode
+
 # Lean Conky Config
 
 <img align="right" height="800" src="./screenshot.jpg?raw=true">

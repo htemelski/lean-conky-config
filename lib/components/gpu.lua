@@ -19,18 +19,18 @@ end
 lcc.tpl.nvidia_nvml = [[
 {% for i, g in ipairs(gpu_info) do %}{% if i>1 then %}${voffset $sr{8}}
 {% end %}
-${font}${color}{%= g.gpu_util %}%${alignc $sr{-16}}{% if #gpu_info>1 then %}{%= i %}: {% end %}{%= g.model_name %}${alignr}{%= g.gpu_temp %}℃
+${font}${color}{%= g.gpu_util %}%${alignc $sr{-16}}{% if #gpu_info>1 then %}{%= i %}: {% end %}{%= g.model_name %}${alignr}{%= g.gpu_temp %}C
 ${color3}${lua_graph "echo {%= g.gpu_util %}" {%= lcc.half_graph_size %}} ${alignr}${lua_graph "echo {%= g.gpu_temp %}" {%= lcc.half_graph_size %} {%= g.gpu_temp_thres %}}${color}
-${color2}${lua font h2 FAN}${goto $sr{148}}${lua font h2 POWER}${font}${color}${alignr}${offset $sr{-138}}{%= g.fan_speed %}%
+${color2}${lua font h2 FAN}${goto $sr{278}}${lua font h2 POWER}${font}${color}${alignr}${offset $sr{-268}}{%= g.fan_speed %}%
 ${voffset $sr{-13}}${alignr}${lua format %.1f {%= g.power_usage %}}W
 ${color3}${lua_bar {%= lcc.half_bar_size %} echo {%= g.fan_speed %}} ${color}${alignr}${lua_bar {%= lcc.half_bar_size %} ratio_perc {%= g.power_usage %} {%= g.power_limit %}}
 ${color2}${lua font h2 MEM}${font}${color} ${alignc $sr{-16}}{%= g.mem_used_h %} / {%= g.mem_total_h %} ${alignr}{%= g.mem_util %}% ${color2}${lua font h2 UT}
 ${color3}${lua_bar ratio_perc {%= g.mem_used %} {%= g.mem_total %}}${color}
 {% if g.processes then %}
-${color2}${lua font h2 {PROCESS ${goto $sr{156}}PID ${goto $sr{194}}MEM%${alignr}GPU%}}${font}${color}#
+${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${goto $sr{280}}MEM%${alignr}GPU%}}${font}${color}#
 {% for _, p in ipairs(g.processes) do +%}
-{%= p.name %} ${goto $sr{156}}{%= p.pid %}${alignr}${offset $sr{-44}}${lua ratio_perc {%= p.gpu_mem %} {%= g.mem_total %} 2}
-${voffset $sr{-13}}${alignr}${lua format %.1f {%= p.gpu_util %}}{% end %}{% end %}
+{%= p.name %} ${goto $sr{156}}{%= p.pid %}${alignr}${offset $sr{-96}}${lua ratio_perc {%= p.gpu_mem %} {%= g.mem_total %} 2}
+${voffset $sr{-16}}${alignr}${lua format %.1f {%= p.gpu_util %}}{% end %}{% end %}
 {% end %}]]
 local function _nvidia_nvml(top_n)
     local out, rc = utils.sys_call(lcc.root_dir .. "/lib/components/gpu_nvml 2>/dev/null", true)
