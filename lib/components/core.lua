@@ -1,3 +1,15 @@
+-- This file includes code from https://github.com/Madh93/conky-spotify
+-- Copyright (C) 2016 Madh93
+-- Licensed under the GNU General Public License, version 3 (GPLv3)
+-- See <https://www.gnu.org/licenses/gpl-3.0.html> for details.
+
+-- This file includes code from https://github.com/jxai/lean-conky-config
+-- Copyright (c) 2021-2023 jxai
+-- Licensed under the MIT License
+-- See LICENSE-MIT or <https://opensource.org/license/MIT> for details.
+
+-- Modifications by htemelski, 2025
+
 local utils = require("utils")
 local core = {}
 
@@ -62,6 +74,13 @@ function core.section(title, icon)
     return lcc.tpl.section { title = title, icon = icon }
 end
 
+lcc.tpl.section_offset = [[
+${color1}${voffset $sr{-42}}${lua font icon {{%= icon %} ${voffset $sr{-1}}} {}}#
+${lua font h1 {{%= title %}}} ${hr $sr{1}}${color}${voffset $sr{5}}]]
+function core.section_offset(title, icon)
+    return lcc.tpl.section_offset { title = title, icon = icon }
+end
+
 -- print message
 local _message_color = {
     error = "${color #f33}",
@@ -108,7 +127,7 @@ Host:${alignr}${nodename}
 Uptime:${alignr}${uptime}
 Processes:${alignr}${running_processes} / ${processes}]]
 function core.system(args)
-    return core.section("SYSTEM", "") .. "\n" .. lcc.tpl.system()
+    return core.section_offset("SYSTEM", "") .. "\n" .. lcc.tpl.system()
 end
 
 -- helper to generate conky text for top_x variables, with optional padding
@@ -286,6 +305,13 @@ function conky_ifaces(interv)
     end)
 end
 
+function core.media() 
+    return [[${font}Spotify (${exec ~/data/code/lean-conky-config/lib/components/spotify/scripts/status.sh}) $hr $color
+${exec ~/data/code/lean-conky-config/lib/components/spotify/scripts/cover.sh}${image ~/data/code/lean-conky-config/lib/components/spotify/current/current.jpg -p 4,122 -s 58x58 -n}
+${offset 70}${font}Title: ${exec ~/data/code/lean-conky-config/lib/components/spotify/scripts/title.sh}
+${offset 70}${font}Artist: ${exec ~/data/code/lean-conky-config/lib/components/spotify/scripts/artist.sh}
+${offset 70}${font}Album: ${exec ~/data/code/lean-conky-config/lib/components/spotify/scripts/album.sh}${voffset 10}]]
+end
 ----------------------------
 -- utils for internal use --
 ----------------------------

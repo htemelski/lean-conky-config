@@ -1,3 +1,5 @@
 local.conf
 .vscode
 *.code-workspace
+/lib/components/spotify/covers/*
+/lib/components/spotify/current/*
