@@ -34,7 +34,6 @@ def process_name(pid, full=False):
 
 
 with nvml():
-
     def query(f, *args, default=None, **kw):
         try:
             f = getattr(pynvml, f)
@@ -66,13 +65,14 @@ with nvml():
         def qp(name, f, *args, **kw):
             return query_and_print(name, f, handle, *args, **kw)
 
-        qp("model_name", "nvmlDeviceGetName")
-
         memory_info = q("nvmlDeviceGetMemoryInfo")
         print_entry("mem_used", memory_info.used)
         print_entry("mem_total", memory_info.total)
         print_entry("mem_free", memory_info.free)
-
+        qp("current_mem_clock", "nvmlDeviceGetClockInfo", pynvml.NVML_CLOCK_MEM)
+        qp("max_mem_clock", "nvmlDeviceGetMaxClockInfo", pynvml.NVML_CLOCK_MEM)
+        qp("current_core_clock", "nvmlDeviceGetClockInfo", pynvml.NVML_CLOCK_GRAPHICS)
+        qp("max_core_clock", "nvmlDeviceGetMaxClockInfo", pynvml.NVML_CLOCK_GRAPHICS)
         util_rates = q("nvmlDeviceGetUtilizationRates")
         print_entry("gpu_util", util_rates.gpu)
         print_entry("mem_util", util_rates.memory)
