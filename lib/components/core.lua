@@ -193,7 +193,7 @@ ${cpubar cpu14}
 ${cpubar cpu15}
 ${cpubar cpu16}
 {% if top_cpu_entries then %}
-${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${goto $sr{280}}MEM% ${alignr}CPU%}}${font}${color}#
+${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${goto $sr{250}}MEM% ${alignr}CPU%}}${font}${color}#
 {% for _, v in ipairs(top_cpu_entries) do +%}
 {%= v.name %} ${goto $sr{156}}{%= v.pid %}${alignr}${offset $sr{-96}}{%= v.mem %}
 ${voffset $sr{-16}}${alignr}{%= v.cpu %}{% end %}{% end %}]]
@@ -210,14 +210,14 @@ ${color3}${membar}${color}
 ${color2}${lua font h2 SWAP}${font}${color} ${alignc $sr{-16}}${swap} / ${swapmax} ${alignr}${swapperc}%
 ${color3}${swapbar}${color}
 {% if top_mem_entries then %}
-${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${goto $sr{280}}CPU%${alignr}MEM%}}${font}${color}#
+${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${goto $sr{250}}MEM%${alignr}MEM}}${font}${color}#
 {% for _, v in ipairs(top_mem_entries) do +%}
-{%= v.name %} ${goto $sr{156}}{%= v.pid %}${alignr}${offset $sr{-96}}{%= v.cpu %}
-${voffset $sr{-16}}${alignr}{%= v.mem %}{% end %}{% end %}]]
+{%= v.name %} ${goto $sr{156}}{%= v.pid %}${alignr}${offset $sr{-96}}{%= v.mem %}
+${voffset $sr{-16}}${alignr}{%= v.mem_res %}{% end %}{% end %}]]
 function core.memory(args)
     local top_n = utils.table.get(args, 'top_n', 5)
     return core.section("MEMORY", "") .. "\n" .. lcc.tpl.memory {
-        top_mem_entries = get_top_entries(top_n, "mem", { "name", "pid", "cpu", "mem" })
+        top_mem_entries = get_top_entries(top_n, "mem", { "name", "pid", "mem_res", "mem" })
     }
 end
 
@@ -240,7 +240,7 @@ end
 lcc.tpl.disks = [[
 {% if disks then %}
 {% for _, v in ipairs(disks) do %}
-${lua font h2 {{%= v.name %}}}${font} ${alignc $sr{-8}}{%= v.used_h %} / {%= v.size_h %} [{%= v.type %}] ${alignr}{%= v.used_perc %}%
+${lua font h2 {{%= v.name %}}}${font} ${alignc $sr{-36}}{%= v.used_h %} / {%= v.size_h %} [{%= v.type %}] ${alignr}{%= v.used_perc %}%
 ${color3}${lua_bar ratio_perc {%= v.used %} {%= v.size %}}${color}
 {% end %}
 {% else %}
