@@ -26,6 +26,7 @@ def process_name(pid, full=False):
         if proc.returncode > 0:
             raise SystemError()
         cmdline = proc.stdout
+        cmdline = cmdline.split("\\")[-1]
         return (
             cmdline if full else osp.basename(cmdline.split(" ", maxsplit=1)[0])
         ).strip()
