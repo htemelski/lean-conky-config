@@ -176,22 +176,14 @@ ${font}${color}Package temperature ${alignr}${exec sensors | grep '^CPU:.*°C' |
 }   C
 
 CPU Load  ${alignr} ${cpu cpu0}%
-${cpubar cpu1}
-${cpubar cpu2}
-${cpubar cpu3}
-${cpubar cpu4}
-${cpubar cpu5}
-${cpubar cpu6}
-${cpubar cpu7}
-${cpubar cpu8}
-${cpubar cpu9}
-${cpubar cpu10}
-${cpubar cpu11}
-${cpubar cpu12}
-${cpubar cpu13}
-${cpubar cpu14}
-${cpubar cpu15}
-${cpubar cpu16}
+${cpugraph cpu1 48,40} ${cpugraph cpu2 48,40} ${cpugraph cpu3 48,40} ${cpugraph cpu4 48,40} \
+${cpugraph cpu5 48,40} ${cpugraph cpu6 48,40} ${cpugraph cpu7 48,40} ${cpugraph cpu8 48,40} 
+${cpugraph cpu9 48,40} ${cpugraph cpu10 48,40} ${cpugraph cpu11 48,40} ${cpugraph cpu12 48,40} \
+${cpugraph cpu13 48,40} ${cpugraph cpu14 48,40} ${cpugraph cpu15 48,40} ${cpugraph cpu16 48,40} 
+${cpugraph cpu1 48,40} ${cpugraph cpu2 48,40} ${cpugraph cpu3 48,40} ${cpugraph cpu4 48,40} \
+${cpugraph cpu5 48,40} ${cpugraph cpu6 48,40} ${cpugraph cpu7 48,40} ${cpugraph cpu8 48,40} 
+${cpugraph cpu9 48,40} ${cpugraph cpu10 48,40} ${cpugraph cpu11 48,40} ${cpugraph cpu12 48,40} \
+${cpugraph cpu13 48,40} ${cpugraph cpu14 48,40} ${cpugraph cpu15 48,40} ${cpugraph cpu16 48,40} 
 {% if top_cpu_entries then %}
 ${color2}${lua font h2 {PROCESS ${goto $sr{160}}PID ${goto $sr{250}}MEM% ${alignr}CPU%}}${font}${color}#
 {% for _, v in ipairs(top_cpu_entries) do +%}
